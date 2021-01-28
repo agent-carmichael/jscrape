@@ -9,19 +9,18 @@ async function scraper() {
     "https://www.semanticscholar.org/search?q=news2&sort=relevance&pdf=true"
   );
 
-  // Promise thrown!
-  // await page.waitForSelector(
-  //   ".cl-paper-row serp-papers__paper-row paper-row-normal"
-  // );
+  await page.waitForSelector(".result-page");
 
-  const results = await page.$$eval(
-    ".cl-paper-row serp-papers__paper-row paper-row-normal",
-    (links) => {
-      return links;
-    }
-  );
+  const html = await page.content();
 
-  console.log(results);
+  const results = await page.$eval(".result-page", (links) => {
+    return links;
+  });
+
+  properHTML = html.toString().includes("result-page");
+
+  console.log(html, results);
+  console.log(properHTML);
 
   browser.close();
 }
