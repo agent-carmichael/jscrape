@@ -11,13 +11,20 @@ puppeteer
     return browser.newPage();
   })
   .then(function (page) {
-    return page.goto(url).then(function () {
-      return page.content();
-    });
+    return page
+      .goto(url, {
+        waitUntil: ["load", "domcontentloaded"],
+      })
+      .then(async function () {
+        cookieBtn = await page.$(".copyright-banner__dismiss-btn");
+        await cookieBtn.click();
+        await page.waitForNavigation();
+        return page.content();
+      });
   })
   .then(function (html) {
-    console.log(html);
-    console.log("-------------------");
+    // console.log(html);
+    // console.log("-------------------");
     $("div", html).each(function () {
       console.log($(this).text());
     });
