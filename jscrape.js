@@ -18,16 +18,21 @@ puppeteer
       .then(async function () {
         cookieBtn = await page.$(".copyright-banner__dismiss-btn");
         await cookieBtn.click();
-        await page.waitForNavigation();
+        await page.reload({
+          waitUntil: ["load", "domcontentloaded"],
+        });
         return page.content();
       });
   })
   .then(function (html) {
     // console.log(html);
+    // console.log(html.includes("serp-papers__paper-row paper-row-normal"));
     // console.log("-------------------");
-    $("div", html).each(function () {
-      console.log($(this).text());
-    });
+    $("div.cl-paper-row serp-papers__paper-row paper-row-normal", html).each(
+      function () {
+        console.log($(this));
+      }
+    );
   })
   .catch(function (err) {
     console.log(err);
